@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  splash:
+    container_name: "splash"
+    image: scrapinghub/splash
+    env_file:
+      - ./.env
+    ports:
+      - "8050:${SPLASH_PORT}"
+  scrapper:
+    container_name: dresslily-scrapper
+    build:
+      context: ./dresslily_scrapper
+      dockerfile: Dockerfile
+    command: scrapy crawl man_hoodie 
+    volumes:
+      - ./dresslily_scrapper/:/scrapper/
+      - ./output/:/output/
+    env_file:
+      - ./.env
