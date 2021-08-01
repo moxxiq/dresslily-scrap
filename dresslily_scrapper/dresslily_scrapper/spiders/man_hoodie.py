@@ -3,6 +3,7 @@ from scrapy_splash import SplashRequest
 from re import findall
 from datetime import datetime
 
+from ..items import ProductItem, ReviewItem
 
 
 class ManHoodieSpider(scrapy.Spider):
@@ -66,16 +67,16 @@ class ManHoodieSpider(scrapy.Spider):
             txt.replace("             ", ";").strip()
             for txt in response.css('div[class="xxkkk20"] *::text').getall()
         )
-        yield {
-            "product_id": product_id,
-            "product_url": response.url,
-            "name": name,
-            "discount": discount,
-            "discounted_price": discounted_price,
-            "original_price": original_price,
-            "total_reviews": total_reviews,
-            "product_info": product_info,
-        }
+        yield ProductItem(
+            product_id=product_id,
+            product_url=response.url,
+            name=name,
+            discount=discount,
+            discounted_price=discounted_price,
+            original_price=original_price,
+            total_reviews=total_reviews,
+            product_info=product_info,
+        )
 
     def parse_reviews(self, response):
         """
@@ -97,14 +98,14 @@ class ManHoodieSpider(scrapy.Spider):
             text = review.xpath('.//div[@class="review-content-text"]/text()').get()
             size = review.xpath('substring(.//span[@class="review-good-size"][1]/text(),7)').get()
             color = review.xpath('substring(.//span[@class="review-good-size"][2]/text(),8)').get()
-            yield {
-                "product_id": product_id,
-                "rating": rating,
-                "timestamp": timestamp,
-                "text": text,
-                "size": size,
-                "color": color,
-            }
+            yield ReviewItem(
+                product_id=product_id,
+                rating=rating,
+                timestamp=timestamp,
+                text=text,
+                size=size,
+                color=color,
+            )
         """
         Button '>' made just for a handling an event which sends GET request to get another page
         
