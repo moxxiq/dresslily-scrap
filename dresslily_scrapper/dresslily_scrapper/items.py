@@ -1,12 +1,24 @@
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/items.html
-
 import scrapy
+from dataclasses import dataclass
 
 
-class DresslilyScrapperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+@dataclass
+class ProductItem:
+    product_id: int
+    product_url: str
+    name: str
+    discount: int
+    discounted_price: str
+    original_price: str
+    total_reviews: int
+    product_info: str
+
+
+@dataclass
+class ReviewItem:
+    product_id: int
+    rating: int
+    timestamp: float
+    text: str
+    size: str
+    color: str
